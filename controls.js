@@ -30,9 +30,6 @@ class Controls {
 					this.down = true;
 					break;
 			}
-
-			// ? Show variables in the console
-			console.table(this);
 		};
 		// ? When key stop being pressed do something
 		document.onkeyup = (event) => {
@@ -53,8 +50,6 @@ class Controls {
 					this.down = false;
 					break;
 			}
-			// ? Show variables in the console
-			console.table(this);
 		};
 	}
 }

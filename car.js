@@ -10,13 +10,14 @@ class Car {
 		this.acceleration = 0.2;
 		this.maxSpeed = 3;
 		this.friction = 0.05;
+		this.angle = 0;
 
 		// ? Set Car's controls
 		this.controls = new Controls();
 	}
 
-	// ? Update the car position
-	update() {
+	// ? Update the car position and angle
+	#move() {
 		// ? Check if it's going forward
 		if (this.controls.forward) {
 			// ? Add acceleration to speed
@@ -41,14 +42,36 @@ class Car {
 		} else if (this.speed < 0) {
 			this.speed += this.friction;
 		}
+		if (Math.abs(this.speed) < this.friction) {
+			this.speed = 0;
+		}
 
-		this.y -= this.speed;
+		if (this.controls.right) {
+			this.angle -= 0.01 * this.speed;
+		} else if (this.controls.left) {
+			this.angle += 0.01 * this.speed;
+		}
+
+		this.x -= Math.sin(this.angle) * this.speed;
+		this.y -= Math.cos(this.angle) * this.speed;
+	}
+
+	// ? Update the car
+	update() {
+		this.#move();
 	}
 
 	// ? Draw the car
 	draw(context) {
+		context.save();
+
+		context.translate(this.x, this.y);
+		context.rotate(-this.angle);
+
 		context.beginPath();
-		context.rect(this.x - this.width / 2, this.y - this.height / 2, this.width, this.height);
+		context.rect(-this.width / 2, -this.height / 2, this.width, this.height);
 		context.fill();
+
+		context.restore();
 	}
 }
