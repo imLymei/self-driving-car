@@ -7,10 +7,34 @@ html,
 }
 
 body {
-	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	background-color: #202020;
 }
 
-#myCanvas {
+#verticalButtons {
+	display: flex;
+	flex-direction: column;
+}
+
+button {
+	border: none;
+	border-radius: 5px;
+	padding: 7px 7px 7px 7px;
+	margin: 20px 5px;
+	cursor: pointer;
+	font-size: x-large;
+}
+
+button:hover {
 	background-color: #595959;
+}
+
+#carCanvas {
+	background-color: #595959;
+}
+
+#networkCanvas {
+	background-color: #030303;
 }

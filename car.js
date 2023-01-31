@@ -1,19 +1,31 @@
 class Car {
 	// ? Set Car's variables
-	constructor(x, y, width, height) {
+	constructor(x, y, width, height, controlType, maxSpeed = 3) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
 
+		this.score = 0;
+
 		this.speed = 0;
-		this.acceleration = 0.2;
-		this.maxSpeed = 3;
+		this.acceleration = 0.1;
+		this.maxSpeed = maxSpeed;
 		this.friction = 0.05;
 		this.angle = 0;
+		this.polygon = this.#createPolygon();
+		this.damage = false;
+		this.counter = 0;
+
+		this.useBrain = controlType == 'AI';
+
+		if (controlType != 'DUMMY') {
+			this.sensor = new Sensor(this);
+			this.brain = new NeuralNetwork([this.sensor.rayCount, 6, 4]);
+		}
 
 		// ? Set Car's controls
-		this.controls = new Controls();
+		this.controls = new Controls(controlType);
 	}
 
 	// ? Update the car position and angle
@@ -47,9 +59,9 @@ class Car {
 		}
 
 		if (this.controls.right) {
-			this.angle -= 0.01 * this.speed;
+			this.angle -= 0.005 * this.speed;
 		} else if (this.controls.left) {
-			this.angle += 0.01 * this.speed;
+			this.angle += 0.005 * this.speed;
 		}
 
 		this.x -= Math.sin(this.angle) * this.speed;
@@ -57,21 +69,87 @@ class Car {
 	}
 
 	// ? Update the car
-	update() {
-		this.#move();
+	update(roadBorders, traffic) {
+		if (!this.damage) {
+			this.#move();
+			this.polygon = this.#createPolygon();
+			this.damage = this.#assessDamage(roadBorders, traffic);
+			if (this.sensor) {
+				this.sensor.update(roadBorders, traffic);
+				const offset = this.sensor.readings.map((s) => (s == null ? 0 : 1 - s.offset));
+				const outputs = NeuralNetwork.feedForward(offset, this.brain);
+
+				if (this.useBrain) {
+					this.controls.forward = outputs[0];
+					this.controls.left = outputs[1];
+					this.controls.right = outputs[2];
+					this.controls.down = outputs[3];
+				}
+			}
+
+			this.score -= 1;
+			if (this.controls.forward) {
+				this.score += 2;
+			}
+			if (this.controls.down) {
+				this.score -= 50;
+			}
+		}
+	}
+
+	#assessDamage(roadBorders, traffic) {
+		for (let i = 0; i < roadBorders.length; i++) {
+			if (polysIntersect(this.polygon, roadBorders[i])) {
+				return true;
+			}
+		}
+		for (let i = 0; i < traffic.length; i++) {
+			if (polysIntersect(this.polygon, traffic[i].polygon)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	#createPolygon() {
+		const points = [];
+		const rad = Math.hypot(this.width, this.height) / 2;
+		const alpha = Math.atan2(this.width, this.height);
+		points.push({
+			x: this.x - Math.sin(this.angle - alpha) * rad,
+			y: this.y - Math.cos(this.angle - alpha) * rad,
+		});
+		points.push({
+			x: this.x - Math.sin(this.angle + alpha) * rad,
+			y: this.y - Math.cos(this.angle + alpha) * rad,
+		});
+		points.push({
+			x: this.x - Math.sin(Math.PI + this.angle - alpha) * rad,
+			y: this.y - Math.cos(Math.PI + this.angle - alpha) * rad,
+		});
+		points.push({
+			x: this.x - Math.sin(Math.PI + this.angle + alpha) * rad,
+			y: this.y - Math.cos(Math.PI + this.angle + alpha) * rad,
+		});
+
+		return points;
 	}
 
 	// ? Draw the car
-	draw(context) {
-		context.save();
-
-		context.translate(this.x, this.y);
-		context.rotate(-this.angle);
-
-		context.beginPath();
-		context.rect(-this.width / 2, -this.height / 2, this.width, this.height);
-		context.fill();
-
-		context.restore();
+	draw(context, color = 'red') {
+		if (this.counter < 20) {
+			if (this.damage) {
+				context.fillStyle = 'gray';
+				this.counter++;
+			} else {
+				context.fillStyle = color;
+			}
+			context.beginPath();
+			context.moveTo(this.polygon[0].x, this.polygon[0].y);
+			for (let i = 1; i < this.polygon.length; i++) {
+				context.lineTo(this.polygon[i].x, this.polygon[i].y);
+			}
+			context.fill();
+		}
 	}
 }
