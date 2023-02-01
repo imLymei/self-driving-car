@@ -64,10 +64,8 @@ const initialize = () => {
 	animate();
 
 	function save() {
-		if (bestCar.score > JSON.parse(localStorage.getItem('bestScore'))) {
-			localStorage.setItem('bestBrain', JSON.stringify(bestCar.brain));
-			localStorage.setItem('bestScore', JSON.stringify(bestCar.score));
-		}
+		localStorage.setItem('bestBrain', JSON.stringify(bestCar.brain));
+		localStorage.setItem('bestScore', JSON.stringify(bestCar.score));
 	}
 
 	function discard() {
