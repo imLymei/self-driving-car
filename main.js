@@ -9,8 +9,6 @@ const initialize = () => {
 
 	const road = new Road(carCanvas.width / 2, carCanvas.width * 0.9);
 	let saveCooldown = 100;
-	let sameBrain = 0;
-	let maxSameBrain = 100;
 
 	const cars = generateCars(1000);
 
@@ -39,14 +37,7 @@ const initialize = () => {
 	animate();
 
 	function save() {
-		let oldBrain = localStorage.getItem('bestBrain');
 		localStorage.setItem('bestBrain', JSON.stringify(bestCar.brain));
-		let newBrain = localStorage.getItem('bestBrain');
-		if (oldBrain == newBrain) {
-			if (sameBrain < maxSameBrain) {
-				sameBrain++;
-			} else initialize();
-		}
 	}
 
 	function discard() {
@@ -99,6 +90,16 @@ const initialize = () => {
 
 		networkContext.lineDashOffset = -time / 50;
 		Visualizer.drawNetwork(networkContext, bestCar.brain);
+
+		document.onkeydown = (event) => {
+			if (event.key == 'r') {
+				initialize();
+			} else if (event.key == 'R') {
+				discard();
+				initialize();
+			}
+		};
+
 		requestAnimationFrame(animate);
 	}
 };

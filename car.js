@@ -92,7 +92,7 @@ class Car {
 				this.score += 2;
 			}
 			if (this.controls.down) {
-				this.score -= 50;
+				this.score -= 20;
 			}
 		}
 	}
