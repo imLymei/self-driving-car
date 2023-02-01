@@ -218,7 +218,7 @@ const initialize = () => {
 
 		timerText.innerHTML = `⏳ Timer: ${setDecimal(maxReloadTimer - reloadTimer, 3)}`;
 		bestScoreText.innerHTML = `🥇 Best score: ${setDecimal(bestCar.score, -3)}`;
-		allTimeBestScoreText.innerHTML = `🏆 Best score ever: ${setDecimal(
+		allTimeBestScoreText.innerHTML = `🏆 Last best score: ${setDecimal(
 			JSON.parse(localStorage.getItem('bestScore')),
 			-3
 		)}`;
