@@ -1,9 +1,9 @@
 class Sensor {
-	constructor(car) {
+	constructor(car, sensorAmount, sensorRange) {
 		this.car = car;
-		this.rayCount = 20;
+		this.rayCount = sensorAmount;
 		this.rayLength = 600;
-		this.raySpread = Math.PI;
+		this.raySpread = Math.PI * (sensorRange / 180);
 
 		this.isOn = true;
 

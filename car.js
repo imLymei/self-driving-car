@@ -1,6 +1,6 @@
 class Car {
 	// ? Set Car's variables
-	constructor(x, y, width, height, controlType, maxSpeed = 3, acceleration = 0.1) {
+	constructor(x, y, width, height, controlType, sensorAmount, sensorRange, maxSpeed = 3, acceleration = 0.1) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -23,7 +23,7 @@ class Car {
 		this.useBrain = controlType == 'AI';
 
 		if (controlType != 'DUMMY') {
-			this.sensor = new Sensor(this);
+			this.sensor = new Sensor(this, sensorAmount, sensorRange);
 			this.brain = new NeuralNetwork([this.sensor.rayCount, 6, 4]);
 		}
 
@@ -97,13 +97,13 @@ class Car {
 			}
 
 			for (let i = 0; i < traffic.length; i++) {
-				if (Math.abs(this.y - traffic[i].y) < 100) {
-					if (Math.abs(this.x - traffic[i].x) < 100) {
+				if (Math.abs(this.y - traffic[i].y) < 150) {
+					if (Math.abs(this.x - traffic[i].x) < 150) {
 						const verticalDistance = Math.abs(this.y - traffic[i].y);
 						const horizontalDistance = Math.abs(this.x - traffic[i].x);
 
 						this.score += 1000 / (pitagoras(verticalDistance, horizontalDistance) + this.timeClosePoints);
-						this.timeClosePoints++;
+						this.timeClosePoints += 5;
 					} else if (this.timeClosePoints > 0) {
 						this.timeClosePoints--;
 					}
@@ -123,13 +123,13 @@ class Car {
 	#assessDamage(roadBorders, traffic) {
 		for (let i = 0; i < roadBorders.length; i++) {
 			if (polysIntersect(this.polygon, roadBorders[i])) {
-				this.score -= 10000;
+				this.score *= 0.5;
 				return true;
 			}
 		}
 		for (let i = 0; i < traffic.length; i++) {
 			if (polysIntersect(this.polygon, traffic[i].polygon)) {
-				this.score -= 10000;
+				this.score *= 0.5;
 				return true;
 			}
 		}
