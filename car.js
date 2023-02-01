@@ -16,6 +16,7 @@ class Car {
 		this.polygon = this.#createPolygon();
 		this.damage = false;
 		this.counter = 0;
+		this.controlType = controlType;
 
 		this.useBrain = controlType == 'AI';
 
@@ -69,7 +70,7 @@ class Car {
 	}
 
 	// ? Update the car
-	update(roadBorders, traffic) {
+	update(roadBorders, traffic, bestCar) {
 		if (!this.damage) {
 			this.#move();
 			this.polygon = this.#createPolygon();
@@ -87,6 +88,12 @@ class Car {
 				}
 			}
 
+			if (this.controlType == 'DUMMY') {
+				if (bestCar.y - this.y < -window.innerHeight * 0.3) {
+					console.log('OUT OF VISION');
+					this.y -= 1000 + Math.random() * 1000;
+				}
+			}
 			this.score -= 1;
 			if (this.controls.forward) {
 				this.score += 2;

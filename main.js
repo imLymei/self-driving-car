@@ -54,7 +54,7 @@ const initialize = () => {
 
 	function animate(time) {
 		for (let i = 0; i < traffic.length; i++) {
-			traffic[i].update(road.borders, []);
+			traffic[i].update(road.borders, [], bestCar);
 		}
 		for (let i = 0; i < cars.length; i++) {
 			cars[i].update(road.borders, traffic);
