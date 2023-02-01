@@ -7,9 +7,6 @@ html,
 }
 
 body {
-	display: flex;
-	justify-content: center;
-	align-items: center;
 	background-color: #000;
 }
 
@@ -20,9 +17,12 @@ body {
 	top: 0;
 	left: 0;
 	padding: 1%;
-	font-family: Arial, Helvetica, sans-serif;
+}
+
+h2 {
 	color: #e5e5e5;
-	font-size: small;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: medium;
 }
 
 .information {
@@ -33,10 +33,27 @@ button:hover {
 	background-color: #595959;
 }
 
+.canvasHold {
+	padding-left: 200px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 #carCanvas {
 	background-color: #030303;
 }
 
 #networkCanvas {
 	background-color: #030303;
+}
+
+#graphCanvas {
+	border: 1px solid #e5e5e5;
+	position: relative;
+	top: 0;
+}
+
+#bestOfLastTen {
+	text-align: center;
 }

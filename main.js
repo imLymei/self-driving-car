@@ -3,6 +3,9 @@ const initialize = () => {
 	carCanvas.width = 200;
 	const networkCanvas = document.getElementById('networkCanvas');
 	networkCanvas.width = window.innerWidth / 2;
+	const graphCanvas = document.getElementById('graphCanvas');
+	graphCanvas.width = window.innerWidth * 0.15;
+	graphCanvas.height = window.innerWidth * 0.15;
 
 	const generationText = document.getElementById('generationText');
 	const timerText = document.getElementById('timerText');
@@ -28,6 +31,7 @@ const initialize = () => {
 
 	const carContext = carCanvas.getContext('2d');
 	const networkContext = networkCanvas.getContext('2d');
+	const graphContext = graphCanvas.getContext('2d');
 
 	const road = new Road(carCanvas.width / 2, carCanvas.width * 0.9);
 
@@ -43,6 +47,11 @@ const initialize = () => {
 		generation = data;
 		generation.generation++;
 	}
+
+	let bestScoreArray = getBestScoreArray();
+	console.log(bestScoreArray);
+
+	Graph.draw(graphContext, bestScoreArray);
 
 	generationText.innerHTML = `📆 Generation: ${generation.generation}`;
 
@@ -107,6 +116,15 @@ const initialize = () => {
 		return 50;
 	}
 
+	function getBestScoreArray() {
+		let array = [];
+
+		if (localStorage.getItem('bestScoreArray')) {
+			array = [...JSON.parse(localStorage.getItem('bestScoreArray'))];
+		}
+		return array;
+	}
+
 	function save() {
 		localStorage.setItem('bestBrain', JSON.stringify(bestCar.brain));
 		localStorage.setItem('bestScore', JSON.stringify(bestCar.score));
@@ -114,6 +132,13 @@ const initialize = () => {
 		localStorage.setItem('amountSensors', JSON.stringify(amountSensors.value));
 		localStorage.setItem('rangeSensors', JSON.stringify(rangeSensors.value));
 		localStorage.setItem('amountMutation', JSON.stringify(amountMutation.value));
+		if (bestScoreArray.length === 10) {
+			bestScoreArray.shift();
+			bestScoreArray.push(bestCar.score);
+		} else {
+			bestScoreArray.push(bestCar.score);
+		}
+		localStorage.setItem('bestScoreArray', JSON.stringify(bestScoreArray));
 	}
 
 	function discard() {
@@ -124,6 +149,7 @@ const initialize = () => {
 		localStorage.removeItem('amountSensors');
 		localStorage.removeItem('rangeSensors');
 		localStorage.removeItem('amountMutation');
+		localStorage.removeItem('bestScoreArray');
 	}
 
 	function generateCars(N) {
