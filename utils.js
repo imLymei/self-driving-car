@@ -40,12 +40,17 @@ function polysIntersect(poly1, poly2) {
 
 function getRGBA(value) {
 	const alpha = Math.abs(value);
-	const R = value < 0 ? 0 : 255;
-	const G = R;
-	const B = value > 0 ? 0 : 255;
+	const R = value < 0 ? 100 : 255;
+	const G = value < 0 ? 0 : R;
+	const B = G;
 	return 'rgba(' + R + ',' + G + ',' + B + ',' + alpha + ')';
 }
 
 function setDecimal(amount, decimal) {
-	return Math.round(amount * Math.pow(10, decimal)) / Math.pow(10, decimal);
+	return Math.round(amount * Math.pow(10, decimal)) / Math.pow(10, decimal < 0 ? 0 : decimal);
+}
+
+function pitagoras(cateto1, cateto2) {
+	const hypotenuse = Math.pow(cateto1, 2) + Math.pow(cateto2, 2);
+	return Math.sqrt(hypotenuse);
 }

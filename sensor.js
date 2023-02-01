@@ -3,7 +3,9 @@ class Sensor {
 		this.car = car;
 		this.rayCount = 10;
 		this.rayLength = 300;
-		this.raySpread = Math.PI / 2;
+		this.raySpread = Math.PI;
+
+		this.isOn = true;
 
 		this.rays = [];
 		this.readings = [];
@@ -63,25 +65,27 @@ class Sensor {
 	}
 
 	draw(context) {
-		for (let i = 0; i < this.rayCount; i++) {
-			let end = this.rays[i][1];
-			if (this.readings[i]) {
-				end = this.readings[i];
+		if (this.isOn) {
+			for (let i = 0; i < this.rayCount; i++) {
+				let end = this.rays[i][1];
+				if (this.readings[i]) {
+					end = this.readings[i];
+				}
+
+				context.beginPath();
+				context.lineWidth = 2;
+				context.strokeStyle = 'yellow';
+				context.moveTo(this.rays[i][0].x, this.rays[i][0].y);
+				context.lineTo(end.x, end.y);
+				context.stroke();
 			}
 
-			context.beginPath();
-			context.lineWidth = 2;
-			context.strokeStyle = 'yellow';
-			context.moveTo(this.rays[i][0].x, this.rays[i][0].y);
-			context.lineTo(end.x, end.y);
-			context.stroke();
-
-			context.beginPath();
-			context.lineWidth = 2;
-			context.strokeStyle = 'black';
-			context.moveTo(this.rays[i][1].x, this.rays[i][1].y);
-			context.lineTo(end.x, end.y);
-			context.stroke();
+			// context.beginPath();
+			// context.lineWidth = 2;
+			// context.strokeStyle = 'white';
+			// context.moveTo(this.rays[i][1].x, this.rays[i][1].y);
+			// context.lineTo(end.x, end.y);
+			// context.stroke();
 		}
 	}
 }

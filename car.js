@@ -60,9 +60,9 @@ class Car {
 		}
 
 		if (this.controls.right) {
-			this.angle -= 0.005 / ((this.speed != 0 ? this.speed : 1000) * 0.09);
+			this.angle -= 0.005 / ((this.speed != 0 ? this.speed : 1000) * 0.07);
 		} else if (this.controls.left) {
-			this.angle += 0.005 / ((this.speed != 0 ? this.speed : 1000) * 0.09);
+			this.angle += 0.005 / ((this.speed != 0 ? this.speed : 1000) * 0.07);
 		}
 
 		this.x -= Math.sin(this.angle) * this.speed;
@@ -90,20 +90,24 @@ class Car {
 
 			if (this.controlType == 'DUMMY') {
 				if (bestCar.y - this.y < -window.innerHeight * 0.3) {
-					console.log('OUT OF VISION');
 					this.y -= 1000 + Math.random() * 1000;
 				}
 			}
 
 			for (let i = 0; i < traffic.length; i++) {
 				if (Math.abs(this.y - traffic[i].y) < 100) {
-					this.score += 100;
+					if (Math.abs(this.x - traffic[i].x) < 100) {
+						const verticalDistance = Math.abs(this.y - traffic[i].y);
+						const horizontalDistance = Math.abs(this.x - traffic[i].x);
+
+						this.score += 2000 / pitagoras(verticalDistance, horizontalDistance);
+					}
 				}
 			}
 
-			this.score -= 1;
+			this.score -= 5;
 			if (this.controls.forward) {
-				this.score += 2 * -Math.sign(this.y) * this.speed;
+				this.score += 10 * -Math.sign(this.y) * this.speed;
 			}
 		}
 	}
@@ -152,6 +156,7 @@ class Car {
 			if (this.damage) {
 				context.fillStyle = 'gray';
 				this.counter++;
+				this.sensor.isOn = false;
 			} else {
 				context.fillStyle = color;
 			}

@@ -6,6 +6,7 @@ const initialize = () => {
 
 	const generationText = document.getElementById('generationText');
 	const timerText = document.getElementById('timerText');
+	const bestScoreText = document.getElementById('bestScoreText');
 
 	const carContext = carCanvas.getContext('2d');
 	const networkContext = networkCanvas.getContext('2d');
@@ -23,7 +24,7 @@ const initialize = () => {
 		generation.generation++;
 	}
 
-	generationText.innerHTML = `Generation: ${generation.generation}`;
+	generationText.innerHTML = `🧬Generation: ${generation.generation}`;
 
 	const cars = generateCars(1000);
 	// const cars = [new Car(road.getLaneCenter(1), 100, 30, 50, 'KEYS', 30, 0.12)];
@@ -84,11 +85,7 @@ const initialize = () => {
 		}
 
 		bestCar = cars.find((data) => data.score == Math.max(...cars.map((e) => e.score)));
-		if (saveCooldown > 0) {
-			saveCooldown--;
-		} else {
-			save();
-		}
+
 		// console.log(bestCar.score);
 
 		carCanvas.height = window.innerHeight;
@@ -103,12 +100,13 @@ const initialize = () => {
 			traffic[i].draw(carContext, 'blue');
 		}
 		carContext.globalAlpha = 0.2;
-		for (let i = 0; i < cars.length; i++) {
+		for (let i = 1; i < cars.length; i++) {
 			cars[i].draw(carContext);
 		}
 		carContext.globalAlpha = 1;
-		bestCar.draw(carContext);
+		cars[0].draw(carContext, 'purple');
 		bestCar.sensor.draw(carContext);
+		bestCar.draw(carContext);
 
 		carContext.restore();
 
@@ -129,10 +127,12 @@ const initialize = () => {
 		} else {
 			reloadTimer = 0;
 			localStorage.setItem('generation', JSON.stringify(generation));
+			save();
 			document.location.reload();
 		}
 
-		timerText.innerHTML = `Timer: ${setDecimal(10 - reloadTimer, 3)}`;
+		timerText.innerHTML = `⏳Timer: ${setDecimal(10 - reloadTimer, 3)}`;
+		bestScoreText.innerHTML = `🏆Best score: ${setDecimal(bestCar.score, -3)}`;
 
 		window.requestAnimationFrame(animate);
 	}
