@@ -117,7 +117,7 @@ const initialize = () => {
 	}
 
 	function getBestScoreArray() {
-		let array = [];
+		let array = [0];
 
 		if (localStorage.getItem('bestScoreArray')) {
 			array = [...JSON.parse(localStorage.getItem('bestScoreArray'))];
