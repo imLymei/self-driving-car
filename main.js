@@ -38,7 +38,7 @@ const initialize = () => {
 		for (let i = 0; i < cars.length; i++) {
 			cars[i].brain = JSON.parse(localStorage.getItem('bestBrain'));
 			if (i != 0) {
-				NeuralNetwork.mutate(cars[i].brain, Math.random() * 0.5);
+				NeuralNetwork.mutate(cars[i].brain, Math.random() * 0.45 + 0.05);
 			}
 		}
 	}
@@ -47,13 +47,17 @@ const initialize = () => {
 
 	const traffic = [
 		new Car(road.getLaneCenter(1), -100, 30, 50, 'DUMMY', dummySpeed),
-		new Car(road.getLaneCenter(1), -100, 30, 50, 'DUMMY', dummySpeed),
-		new Car(road.getLaneCenter(0), -300, 30, 50, 'DUMMY', dummySpeed),
-		new Car(road.getLaneCenter(2), -300, 30, 50, 'DUMMY', dummySpeed),
-		new Car(road.getLaneCenter(1), -500, 30, 50, 'DUMMY', dummySpeed),
-		new Car(road.getLaneCenter(0), -500, 30, 50, 'DUMMY', dummySpeed),
+		new Car(road.getLaneCenter(0), -200, 30, 50, 'DUMMY', dummySpeed),
+
+		new Car(road.getLaneCenter(1), -400, 30, 50, 'DUMMY', dummySpeed),
+		new Car(road.getLaneCenter(2), -600, 30, 50, 'DUMMY', dummySpeed),
+		new Car(road.getLaneCenter(0), -600, 30, 50, 'DUMMY', dummySpeed),
+		new Car(road.getLaneCenter(0), -800, 30, 50, 'DUMMY', dummySpeed),
+
 		new Car(road.getLaneCenter(2), -800, 30, 50, 'DUMMY', dummySpeed),
-		new Car(road.getLaneCenter(1), -900, 30, 50, 'DUMMY', dummySpeed),
+
+		new Car(road.getLaneCenter(1), -1000, 30, 50, 'DUMMY', dummySpeed),
+
 		new Car(road.getLaneCenter(0), -1100, 30, 50, 'DUMMY', dummySpeed),
 	];
 

@@ -62,9 +62,9 @@ class Car {
 		}
 
 		if (this.controls.right) {
-			this.angle -= 0.005 / ((this.speed != 0 ? this.speed : 1000) * 0.07);
+			this.angle -= 0.005 / ((this.speed != 0 ? this.speed : 1000) * 0.05);
 		} else if (this.controls.left) {
-			this.angle += 0.005 / ((this.speed != 0 ? this.speed : 1000) * 0.07);
+			this.angle += 0.005 / ((this.speed != 0 ? this.speed : 1000) * 0.05);
 		}
 
 		this.x -= Math.sin(this.angle) * this.speed;
@@ -92,7 +92,7 @@ class Car {
 
 			if (this.controlType == 'DUMMY') {
 				if (bestCar.y - this.y < -window.innerHeight * 0.3) {
-					this.y -= 1000 + Math.random() * 1000;
+					this.y -= 1000 + lerp(0, Math.random() * 300, 0.3);
 				}
 			}
 
@@ -112,11 +112,7 @@ class Car {
 				}
 			}
 
-			this.score -= 40;
-
-			if (this.controls.forward) {
-				this.score += 10 * -Math.sign(this.y) * this.speed;
-			}
+			this.score += 10 * -Math.sign(this.y) * this.speed - 40;
 
 			if (bestCar.y - this.y < -window.innerHeight * 0.3) {
 				this.damage = true;
@@ -127,11 +123,13 @@ class Car {
 	#assessDamage(roadBorders, traffic) {
 		for (let i = 0; i < roadBorders.length; i++) {
 			if (polysIntersect(this.polygon, roadBorders[i])) {
+				this.score -= 10000;
 				return true;
 			}
 		}
 		for (let i = 0; i < traffic.length; i++) {
 			if (polysIntersect(this.polygon, traffic[i].polygon)) {
+				this.score -= 10000;
 				return true;
 			}
 		}
