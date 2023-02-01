@@ -13,30 +13,20 @@ body {
 	background-color: #202020;
 }
 
-#verticalButtons {
-	display: flex;
-	flex-direction: column;
-}
-
-button {
-	border: none;
-	border-radius: 5px;
-	padding: 7px 7px 7px 7px;
-	margin: 20px 5px;
-	cursor: pointer;
-	font-size: x-large;
-}
-
-.instructions {
+.text {
 	position: absolute;
 	display: flex;
 	flex-direction: column;
 	top: 0;
 	left: 0;
-	margin: 1%;
+	padding: 1%;
 	font-family: Arial, Helvetica, sans-serif;
 	color: #e5e5e5;
 	font-size: small;
+}
+
+.information {
+	margin-top: 20px;
 }
 
 button:hover {

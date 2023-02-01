@@ -22,18 +22,22 @@ class Controls {
 			switch (event.key) {
 				case 'ArrowLeft':
 					this.left = true;
+					console.log('LEFT');
 					break;
 
 				case 'ArrowRight':
 					this.right = true;
+					console.log('RIGHT');
 					break;
 
 				case 'ArrowUp':
 					this.forward = true;
+					console.log('UP');
 					break;
 
 				case 'ArrowDown':
 					this.down = true;
+					console.log('DOWN');
 					break;
 			}
 		};

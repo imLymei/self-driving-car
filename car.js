@@ -1,6 +1,6 @@
 class Car {
 	// ? Set Car's variables
-	constructor(x, y, width, height, controlType, maxSpeed = 3) {
+	constructor(x, y, width, height, controlType, maxSpeed = 3, acceleration = 0.1) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -9,7 +9,7 @@ class Car {
 		this.score = 0;
 
 		this.speed = 0;
-		this.acceleration = 0.1;
+		this.acceleration = acceleration;
 		this.maxSpeed = maxSpeed;
 		this.friction = 0.05;
 		this.angle = 0;
@@ -60,9 +60,9 @@ class Car {
 		}
 
 		if (this.controls.right) {
-			this.angle -= 0.005 * this.speed;
+			this.angle -= 0.005 / ((this.speed != 0 ? this.speed : 1000) * 0.09);
 		} else if (this.controls.left) {
-			this.angle += 0.005 * this.speed;
+			this.angle += 0.005 / ((this.speed != 0 ? this.speed : 1000) * 0.09);
 		}
 
 		this.x -= Math.sin(this.angle) * this.speed;
@@ -94,12 +94,16 @@ class Car {
 					this.y -= 1000 + Math.random() * 1000;
 				}
 			}
+
+			for (let i = 0; i < traffic.length; i++) {
+				if (Math.abs(this.y - traffic[i].y) < 100) {
+					this.score += 100;
+				}
+			}
+
 			this.score -= 1;
 			if (this.controls.forward) {
-				this.score += 2;
-			}
-			if (this.controls.down) {
-				this.score -= 20;
+				this.score += 2 * -Math.sign(this.y) * this.speed;
 			}
 		}
 	}

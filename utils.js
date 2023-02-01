@@ -45,3 +45,7 @@ function getRGBA(value) {
 	const B = value > 0 ? 0 : 255;
 	return 'rgba(' + R + ',' + G + ',' + B + ',' + alpha + ')';
 }
+
+function setDecimal(amount, decimal) {
+	return Math.round(amount * Math.pow(10, decimal)) / Math.pow(10, decimal);
+}
