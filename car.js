@@ -8,6 +8,8 @@ class Car {
 
 		this.score = 0;
 
+		this.timeClosePoints = 0;
+
 		this.speed = 0;
 		this.acceleration = acceleration;
 		this.maxSpeed = maxSpeed;
@@ -100,14 +102,24 @@ class Car {
 						const verticalDistance = Math.abs(this.y - traffic[i].y);
 						const horizontalDistance = Math.abs(this.x - traffic[i].x);
 
-						this.score += 2000 / pitagoras(verticalDistance, horizontalDistance);
+						this.score += 1000 / (pitagoras(verticalDistance, horizontalDistance) + this.timeClosePoints);
+						this.timeClosePoints++;
+					} else if (this.timeClosePoints > 0) {
+						this.timeClosePoints--;
 					}
+				} else if (this.y - traffic[i].y < -200 && this.y - traffic[i].y > -200 - this.speed * 1.1) {
+					this.score += 5000;
 				}
 			}
 
-			this.score -= 5;
+			this.score -= 40;
+
 			if (this.controls.forward) {
 				this.score += 10 * -Math.sign(this.y) * this.speed;
+			}
+
+			if (bestCar.y - this.y < -window.innerHeight * 0.3) {
+				this.damage = true;
 			}
 		}
 	}

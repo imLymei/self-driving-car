@@ -48,6 +48,13 @@ class Visualizer {
 			const x = Visualizer.#getNodeX(inputs, i, left, right);
 			ctx.beginPath();
 			ctx.arc(x, bottom, nodeRadius, 0, Math.PI * 2);
+			ctx.strokeStyle = 'white';
+			ctx.setLineDash([]);
+			ctx.lineWidth = 1;
+			ctx.stroke();
+
+			ctx.beginPath();
+			ctx.arc(x, bottom, nodeRadius, 0, Math.PI * 2);
 			ctx.fillStyle = 'black';
 			ctx.fill();
 			ctx.beginPath();
@@ -58,6 +65,13 @@ class Visualizer {
 
 		for (let i = 0; i < outputs.length; i++) {
 			const x = Visualizer.#getNodeX(outputs, i, left, right);
+			ctx.beginPath();
+			ctx.arc(x, top, nodeRadius, 0, Math.PI * 2);
+			ctx.strokeStyle = 'white';
+			ctx.setLineDash([]);
+			ctx.lineWidth = 1;
+			ctx.stroke();
+
 			ctx.beginPath();
 			ctx.arc(x, top, nodeRadius, 0, Math.PI * 2);
 			ctx.fillStyle = 'black';
