@@ -1,6 +1,6 @@
 # Javascript Self-Driving Car
 
-Self-driving car made with machine learning in pure HTML/CSS and Javascript
+Self-driving car made with machine learning in pure HTML/CSS and Javascript. Neural network with sensors inputs layer, hidden layer with six nodes and an output layer with four responses.
 
 ## 💻 Frameworks
 
